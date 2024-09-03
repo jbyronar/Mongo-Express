@@ -1,0 +1,32 @@
+
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# Dependency directories (if you're using any package managers)
+package-lock.json
+yarn.lock
+
+# IDE or editor specific files
+.idea/
+.vscode/
+*.swp
+
+# Temporary files
+*.tmp
+
+# MacOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
