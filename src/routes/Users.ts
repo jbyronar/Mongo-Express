@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
   try {
-    //const { date, weather, visibility, comment } = req.body;
+    const { hola } = req.body;
 
     res.json("Get User");
   } catch (e) {
@@ -12,9 +12,17 @@ router.post("/", (req, res) => {
   }
 });
 
+router.get("/", (req, res) => {
+  console.log("Enter to get ");
+  res.json({
+    Get: "Prueba",
+  });
+});
+
 export default router;
 
 /*
+
 
 router.get("/", (_req, res) => {
   res.send(diaryServices.getEntriesWithoutSensitiveInfo());

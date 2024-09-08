@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import usersRouter from "./routes/Users";
 import dotenv from "dotenv";
+import cors from "cors";
 import { MongoDBAdapter, MongoDBAdapterImpl } from "./adapters/mongodb.adapter";
 dotenv.config();
 
@@ -9,10 +10,19 @@ const dbName = "example";
 mongodb.init(dbName);
 
 const app = express();
+// Middleware
+app.use(cors());
 app.use(express.json());
 const PORT = 3000;
 
 app.use("/api/users", usersRouter);
+
+app.get("/", async (_req: Request, res: Response) => {
+  console.log("hello");
+  res.json({
+    hola: 1,
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server runnig on port ${PORT}`);
@@ -35,6 +45,6 @@ app.get("/", async  (_req: Request,  res: Response) => {
     hola: 1
   });
 
-});
+
 
 */
