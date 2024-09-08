@@ -2,12 +2,6 @@ import express, { Request, Response } from "express";
 import usersRouter from "./routes/Users";
 import dotenv from "dotenv";
 import cors from "cors";
-import { MongoDBAdapter, MongoDBAdapterImpl } from "./adapters/mongodb.adapter";
-dotenv.config();
-
-const mongodb: MongoDBAdapter = new MongoDBAdapterImpl();
-const dbName = "example";
-mongodb.init(dbName);
 
 const app = express();
 // Middleware
@@ -17,6 +11,12 @@ const PORT = 3000;
 
 app.use("/api/users", usersRouter);
 
+app.listen(PORT, () => {
+  console.log(`Server runnig on port ${PORT}`);
+});
+
+/*
+
 app.get("/", async (_req: Request, res: Response) => {
   console.log("hello");
   res.json({
@@ -24,11 +24,6 @@ app.get("/", async (_req: Request, res: Response) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server runnig on port ${PORT}`);
-});
-
-/*
 
 //app.use("/api/diaries", diaryRouter);
 
