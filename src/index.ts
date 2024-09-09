@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import usersRouter from "./routes/Users";
-import dotenv from "dotenv";
+import usersSettingRouter from "./routes/UserSettings";
 import cors from "cors";
 
 const app = express();
@@ -10,6 +10,7 @@ app.use(express.json());
 const PORT = 3000;
 
 app.use("/api/users", usersRouter);
+app.use("/api/usersSetting", usersSettingRouter);
 
 app.listen(PORT, () => {
   console.log(`Server runnig on port ${PORT}`);
