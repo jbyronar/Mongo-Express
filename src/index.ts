@@ -7,6 +7,15 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use((req, _res, next) => {
+  console.log("Request Data:", {
+    method: req.method,
+    url: req.url,
+    headers: req.headers,
+    body: req.body,
+  });
+  next();
+});
 const PORT = 3000;
 
 app.use("/api/users", usersRouter);
