@@ -9,6 +9,11 @@ const mongodb: MongoDBAdapter = new MongoDBAdapterImpl();
 const dbName = "example";
 mongodb.init(dbName, "dataBase services");
 
+export const findByQuery = async (collection: string, query: any) => {
+  const result = await mongodb.find(collection, query);
+  return result;
+};
+
 export const findById = async (collection: string, id: number) => {
   const result = await mongodb.find(collection, { id: id });
   return result;
