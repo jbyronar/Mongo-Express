@@ -14,12 +14,7 @@ app.use(async (req, _res, next) => {
   const verb = req.method;
   console.log("HTTP Verb:", verb);
   let endpoint = req.url;
-  if (verb.toLowerCase() === "get") {
-    endpoint = endpoint.split("/").slice(0, -1).join("/") || "/";
-  }
-  if (verb.toLowerCase() === "post") {
-    endpoint = endpoint.split("/").slice(0, -1).join("/") || "/";
-  }
+  endpoint = endpoint.split("/").slice(0, -1).join("/") || "/";
   console.log("Endpoint:", endpoint);
 
   const idRole = Number(req.header("id"));
@@ -29,14 +24,39 @@ app.use(async (req, _res, next) => {
   console.log("Role Name:", role_name);
 
   const resultACL = await findByQuery("ACL", { endPoint: endpoint });
-  const list = resultACL[0].powers.find((item) => item.role == role_name).list;
+
+  let list: string[];
+  try {
+    if (resultACL[0] && resultACL[0].powers) {
+      const power = resultACL[0].powers.find(
+        (item: { role: string }) => item.role === role_name,
+      );
+      if (power && power.list) {
+        list = power.list;
+      } else {
+        throw new Error("User role not found");
+      }
+    } else {
+      throw new Error("ResultACL or powers not found");
+    }
+  } catch (error) {
+    console.error("Error accessing ACL data:", error);
+    list = [];
+  }
 
   let acces = false;
   if (list.includes(verb.toLowerCase())) {
     acces = true;
   }
   console.log("ACL Result:", acces);
-  next();
+
+  if (acces) {
+    // Continue the process
+    next();
+  } else {
+    // Stop the process and send an error message
+    return _res.status(403).json({ error: "Access denied" });
+  }
 });
 
 const PORT = 3000;
