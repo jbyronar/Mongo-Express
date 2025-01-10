@@ -21,6 +21,48 @@ export class MongoDBAdapterImpl implements MongoDBAdapter {
       await this.client.connect();
       console.log(`${dbName} from ${from}`);
       this.db = this.client.db(dbName);
+
+      //Data base start test
+      console.log("Star test");
+      const collectionNames = await this.db.listCollections().toArray();
+      const existingCollections = collectionNames.map((c) => c.name);
+      const requiredCollections = ["ACL", "Roles", "UsersSettings", "users"];
+
+      for (const collection of requiredCollections) {
+        if (!existingCollections.includes(collection)) {
+          await this.db.createCollection(collection);
+          console.log(`${collection} collection created`);
+
+          if (collection === "ACL") {
+            await this.insert("ACL", {
+              endPoint: "/api/users",
+              powers: [
+                {
+                  role: "admin",
+                  list: ["get", "post", "delete"],
+                },
+                {
+                  role: "auditor",
+                  list: ["get", "put"],
+                },
+              ],
+            });
+          }
+
+          if (collection === "Roles") {
+            await this.insert("Roles", {
+              role_id: 890,
+              role_name: "admin",
+            });
+            await this.insert("Roles", {
+              role_id: 714,
+              role_name: "auditor",
+            });
+          }
+        } else {
+          console.log(`${collection} collection already exists`);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
